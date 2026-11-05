@@ -33,7 +33,7 @@ export function createApp(config: RigConfig = loadConfig(), readDigest: ReadNigh
   app.get('/', (c) =>
     c.html(
       <Layout title="status" lane={lane()}>
-        <StatusBoard status={readStatus(config)} />
+        <StatusBoard status={readStatus(config, readDigest)} />
       </Layout>,
     ),
   );
