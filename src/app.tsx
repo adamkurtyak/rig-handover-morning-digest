@@ -18,6 +18,18 @@ export function createApp(config: RigConfig = loadConfig(), readDigest: ReadNigh
 
   app.get('/health', (c) => c.json({ ok: true, lane: lane().id }));
 
+  app.get('/api/digest/:night', (c) => {
+    try {
+      const digest = readDigest(config.runsDir, c.req.param('night'));
+      return c.json(sortDigestRows(digest.rows));
+    } catch (error: unknown) {
+      if (isMissingFile(error)) {
+        return c.json({ error: 'night not found' }, 404);
+      }
+      throw error;
+    }
+  });
+
   app.get('/', (c) =>
     c.html(
       <Layout title="status" lane={lane()}>
